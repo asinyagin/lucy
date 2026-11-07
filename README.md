@@ -1,0 +1,2 @@
+# lucy
+Plan, schedule, journal
