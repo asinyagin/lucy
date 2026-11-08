@@ -24,15 +24,77 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // main.ts
 var main_exports = {};
 __export(main_exports, {
+  TASKS_VIEW_TYPE: () => TASKS_VIEW_TYPE,
   default: () => LucyPlugin
 });
 module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
+var TASKS_VIEW_TYPE = "lucy-tasks-view";
+var TasksView = class extends import_obsidian.ItemView {
+  constructor(leaf) {
+    super(leaf);
+    this.renderQueue = Promise.resolve();
+  }
+  getViewType() {
+    return TASKS_VIEW_TYPE;
+  }
+  getDisplayText() {
+    return "Tasks";
+  }
+  getIcon() {
+    return "check-circle";
+  }
+  async onOpen() {
+    this.registerEvent(this.app.vault.on("create", () => this.queueRender()));
+    this.registerEvent(this.app.vault.on("modify", () => this.queueRender()));
+    this.registerEvent(this.app.vault.on("delete", () => this.queueRender()));
+    this.registerEvent(this.app.vault.on("rename", () => this.queueRender()));
+    await this.render();
+  }
+  async onClose() {
+    this.containerEl.empty();
+  }
+  queueRender() {
+    this.renderQueue = this.renderQueue.then(() => this.render());
+    return this.renderQueue;
+  }
+  async collectTasks() {
+    const tasks = [];
+    for (const file of this.app.vault.getMarkdownFiles()) {
+      const content = await this.app.vault.read(file);
+      for (const line of content.split("\n")) {
+        const match = line.match(/^TODO\s+(.+)$/);
+        if (match) tasks.push({ text: match[1], file: file.path });
+      }
+    }
+    return tasks;
+  }
+  async render() {
+    const tasks = await this.collectTasks();
+    this.containerEl.empty();
+    const list = this.containerEl.createDiv({ cls: "lucy-task-list" });
+    for (const task of tasks) {
+      const item = list.createDiv({ cls: "lucy-task" });
+      item.setAttribute("data-task", task.text);
+      item.setAttribute("data-file", task.file);
+      item.setText(task.text);
+      item.addEventListener("click", () => {
+        const target = this.app.vault.getAbstractFileByPath(task.file);
+        if (target instanceof import_obsidian.TFile) {
+          void this.app.workspace.getLeaf("tab").openFile(target);
+        }
+      });
+    }
+  }
+};
 var LucyPlugin = class extends import_obsidian.Plugin {
   async onload() {
-    console.log("Loading Lucy plugin");
-  }
-  onunload() {
-    console.log("Unloading Lucy plugin");
+    this.registerView(TASKS_VIEW_TYPE, (leaf) => new TasksView(leaf));
+    this.app.workspace.onLayoutReady(() => {
+      const leaf = this.app.workspace.getRightLeaf(false);
+      if (leaf) {
+        void leaf.setViewState({ type: TASKS_VIEW_TYPE, active: true });
+      }
+    });
   }
 };
