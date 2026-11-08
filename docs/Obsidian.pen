@@ -1,0 +1,638 @@
+{
+  "version": "2.21",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Tasks",
+      "clip": true,
+      "width": 1320,
+      "height": 600,
+      "fill": "$panel",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "o7eVB",
+          "x": 160,
+          "y": 26,
+          "name": "Board Caption",
+          "fill": "$text-faint",
+          "content": "Lucy for Obsidian — Tasks view, right panel (480 × 480) · light & dark",
+          "fontFamily": "$font-ui",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "d4HOW2",
+          "x": 160,
+          "y": 60,
+          "name": "Tasks View",
+          "clip": true,
+          "width": 480,
+          "height": 480,
+          "fill": "$bg",
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A14",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24
+          },
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "SgGH8",
+              "name": "Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YZ6P7",
+                  "name": "Titles",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 5,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "b5zI1l",
+                      "name": "Heading",
+                      "fill": "$text-primary",
+                      "content": "Tasks",
+                      "fontFamily": "$font-ui",
+                      "fontSize": 24,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "v2CS6l",
+                      "name": "Subtitle",
+                      "fill": "$text-secondary",
+                      "content": "Every TODO in your vault, in one place",
+                      "fontFamily": "$font-ui",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bwspr",
+                  "name": "Count Badge",
+                  "fill": "$accent-soft",
+                  "cornerRadius": 999,
+                  "padding": [
+                    4,
+                    11
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "R5RyB",
+                      "name": "Count",
+                      "fill": "$accent",
+                      "content": "3",
+                      "fontFamily": "$font-ui",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "r7XIW",
+              "name": "Divider",
+              "fill": "$border",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "BPzUA",
+              "name": "Task List",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "id": "Q3kM9",
+                  "type": "ref",
+                  "ref": "Km8WA",
+                  "name": "Task: Describe task list",
+                  "width": "fill_container",
+                  "descendants": {
+                    "D0rQk": {
+                      "content": "Describe task list"
+                    },
+                    "YWDHf": {
+                      "content": "Ideas.md"
+                    }
+                  }
+                },
+                {
+                  "type": "rectangle",
+                  "id": "UE2OB",
+                  "name": "Row Divider",
+                  "fill": "$border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "id": "W9PCw0",
+                  "type": "ref",
+                  "ref": "Km8WA",
+                  "name": "Task: Add screen layout in tsquare",
+                  "width": "fill_container",
+                  "descendants": {
+                    "D0rQk": {
+                      "content": "Add screen layout in tsquare"
+                    },
+                    "YWDHf": {
+                      "content": "Obsidian.md"
+                    }
+                  }
+                },
+                {
+                  "type": "rectangle",
+                  "id": "ACleO",
+                  "name": "Row Divider",
+                  "fill": "$border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "id": "TKpdT",
+                  "type": "ref",
+                  "ref": "Km8WA",
+                  "name": "Task: Describe scenarios in DSL",
+                  "width": "fill_container",
+                  "descendants": {
+                    "D0rQk": {
+                      "content": "Describe scenarios in DSL"
+                    },
+                    "YWDHf": {
+                      "content": "Obsidian.md"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xSLnk",
+              "name": "Footer",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "JDfU1",
+                  "width": 13,
+                  "height": 13,
+                  "icon": "mouse-pointer-click",
+                  "library": "lucide",
+                  "fill": "$text-faint"
+                },
+                {
+                  "type": "text",
+                  "id": "bx54m",
+                  "name": "Footer Hint",
+                  "fill": "$text-faint",
+                  "content": "Click a task to open the note it lives in",
+                  "fontFamily": "$font-ui",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HP9dw",
+          "x": 680,
+          "y": 60,
+          "name": "Tasks View Dark",
+          "theme": {
+            "mode": "dark"
+          },
+          "clip": true,
+          "width": 480,
+          "height": 480,
+          "fill": "$bg",
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A14",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24
+          },
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "WOb7s",
+              "name": "Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "cefsU",
+                  "name": "Titles",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 5,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "klzn2",
+                      "name": "Heading",
+                      "fill": "$text-primary",
+                      "content": "Tasks",
+                      "fontFamily": "$font-ui",
+                      "fontSize": 24,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "z7Ddy",
+                      "name": "Subtitle",
+                      "fill": "$text-secondary",
+                      "content": "Every TODO in your vault, in one place",
+                      "fontFamily": "$font-ui",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cE08g",
+                  "name": "Count Badge",
+                  "fill": "$accent-soft",
+                  "cornerRadius": 999,
+                  "padding": [
+                    4,
+                    11
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ti6AG",
+                      "name": "Count",
+                      "fill": "$accent",
+                      "content": "3",
+                      "fontFamily": "$font-ui",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "Fhg6W",
+              "name": "Divider",
+              "fill": "$border",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "S2o1Ku",
+              "name": "Task List",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "id": "ReL4B",
+                  "type": "ref",
+                  "ref": "Km8WA",
+                  "name": "Task: Describe task list",
+                  "width": "fill_container",
+                  "descendants": {
+                    "D0rQk": {
+                      "content": "Describe task list"
+                    },
+                    "YWDHf": {
+                      "content": "Ideas.md"
+                    }
+                  }
+                },
+                {
+                  "type": "rectangle",
+                  "id": "tFE94",
+                  "name": "Row Divider",
+                  "fill": "$border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "id": "u4GTr",
+                  "type": "ref",
+                  "ref": "Km8WA",
+                  "name": "Task: Add screen layout in tsquare",
+                  "width": "fill_container",
+                  "descendants": {
+                    "D0rQk": {
+                      "content": "Add screen layout in tsquare"
+                    },
+                    "YWDHf": {
+                      "content": "Obsidian.md"
+                    }
+                  }
+                },
+                {
+                  "type": "rectangle",
+                  "id": "hcDyB",
+                  "name": "Row Divider",
+                  "fill": "$border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "id": "QP7M7",
+                  "type": "ref",
+                  "ref": "Km8WA",
+                  "name": "Task: Describe scenarios in DSL",
+                  "width": "fill_container",
+                  "descendants": {
+                    "D0rQk": {
+                      "content": "Describe scenarios in DSL"
+                    },
+                    "YWDHf": {
+                      "content": "Obsidian.md"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TYIXP",
+              "name": "Footer",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "JMa8L",
+                  "width": 13,
+                  "height": 13,
+                  "icon": "mouse-pointer-click",
+                  "library": "lucide",
+                  "fill": "$text-faint"
+                },
+                {
+                  "type": "text",
+                  "id": "KjLcx",
+                  "name": "Footer Hint",
+                  "fill": "$text-faint",
+                  "content": "Click a task to open the note it lives in",
+                  "fontFamily": "$font-ui",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Km8WA",
+      "x": 0,
+      "y": 0,
+      "name": "Task Row",
+      "reusable": true,
+      "width": 432,
+      "gap": 12,
+      "padding": [
+        12,
+        2
+      ],
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ONKzJ",
+          "name": "Texts",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 3,
+          "children": [
+            {
+              "type": "text",
+              "id": "D0rQk",
+              "name": "Task Title",
+              "fill": "$text-primary",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Task title",
+              "fontFamily": "$font-ui",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "pRdGa",
+              "name": "Note Ref",
+              "gap": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "kj8m5",
+                  "width": 11,
+                  "height": 11,
+                  "icon": "file-text",
+                  "library": "lucide",
+                  "fill": "$text-faint"
+                },
+                {
+                  "type": "text",
+                  "id": "YWDHf",
+                  "name": "Note Name",
+                  "fill": "$text-faint",
+                  "content": "Note.md",
+                  "fontFamily": "$font-ui",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "icon",
+          "id": "toV6f",
+          "width": 14,
+          "height": 14,
+          "icon": "chevron-right",
+          "library": "lucide",
+          "fill": "$text-faint"
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
+  "variables": {
+    "accent": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2563EB",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#5B8DEF",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "accent-soft": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#EDF3FE",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#212B40",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#1F2126",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "panel": {
+      "type": "color",
+      "value": "#F5F6F8"
+    },
+    "text-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#191B20",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#E9EBEF",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-secondary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#6B7280",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#A6ADB8",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-faint": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#9CA3AF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#7D8590",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "border": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#E8E9ED",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#30343D",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "font-ui": {
+      "type": "string",
+      "value": "Inter"
+    }
+  },
+  "fileToken": "0b780c44-eb43-4a09-8349-520ef082cd42"
+}

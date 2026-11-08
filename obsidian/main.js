@@ -30,10 +30,122 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
 var TASKS_VIEW_TYPE = "lucy-tasks-view";
+var VIEW_CSS = `
+.lucy-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+.lucy-tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.lucy-tasks-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.lucy-tasks-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+.lucy-tasks-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.lucy-tasks-count {
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--interactive-accent);
+  background: color-mix(in srgb, var(--interactive-accent) 12%, transparent);
+}
+.lucy-tasks-divider,
+.lucy-task-divider {
+  height: 1px;
+  flex: none;
+  background: var(--divider-color);
+}
+.lucy-task-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.lucy-task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 2px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.lucy-task:hover {
+  background: var(--background-modifier-hover);
+}
+.lucy-task-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.lucy-task-heading {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-normal);
+}
+.lucy-task-note {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+.lucy-task-note-icon svg {
+  width: 11px;
+  height: 11px;
+}
+.lucy-task-chevron {
+  display: flex;
+  color: var(--text-faint);
+}
+.lucy-task-chevron svg {
+  width: 14px;
+  height: 14px;
+}
+.lucy-tasks-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+.lucy-tasks-footer-icon svg {
+  width: 13px;
+  height: 13px;
+}
+`;
+function noteName(path) {
+  var _a;
+  return (_a = path.split("/").pop()) != null ? _a : path;
+}
 var TasksView = class extends import_obsidian.ItemView {
   constructor(leaf) {
     super(leaf);
     this.renderQueue = Promise.resolve();
+    if (!document.head.querySelector("style[data-lucy-tasks]")) {
+      const style = document.createElement("style");
+      style.setAttribute("data-lucy-tasks", "");
+      style.textContent = VIEW_CSS;
+      document.head.appendChild(style);
+    }
   }
   getViewType() {
     return TASKS_VIEW_TYPE;
@@ -72,19 +184,35 @@ var TasksView = class extends import_obsidian.ItemView {
   async render() {
     const tasks = await this.collectTasks();
     this.containerEl.empty();
-    const list = this.containerEl.createDiv({ cls: "lucy-task-list" });
-    for (const task of tasks) {
+    const root = this.containerEl.createDiv({ cls: "lucy-tasks" });
+    const header = root.createDiv({ cls: "lucy-tasks-header" });
+    const titles = header.createDiv({ cls: "lucy-tasks-titles" });
+    titles.createDiv({ cls: "lucy-tasks-title", text: "Tasks" });
+    titles.createDiv({ cls: "lucy-tasks-subtitle", text: "Every TODO in your vault, in one place" });
+    header.createDiv({ cls: "lucy-tasks-count", text: String(tasks.length) });
+    root.createDiv({ cls: "lucy-tasks-divider" });
+    const list = root.createDiv({ cls: "lucy-task-list" });
+    tasks.forEach((task, index) => {
+      if (index > 0) list.createDiv({ cls: "lucy-task-divider" });
       const item = list.createDiv({ cls: "lucy-task" });
       item.setAttribute("data-task", task.text);
       item.setAttribute("data-file", task.file);
-      item.setText(task.text);
+      const texts = item.createDiv({ cls: "lucy-task-texts" });
+      texts.createDiv({ cls: "lucy-task-heading", text: task.text });
+      const note = texts.createDiv({ cls: "lucy-task-note" });
+      (0, import_obsidian.setIcon)(note.createSpan({ cls: "lucy-task-note-icon" }), "file-text");
+      note.createSpan({ cls: "lucy-task-note-name", text: noteName(task.file) });
+      (0, import_obsidian.setIcon)(item.createSpan({ cls: "lucy-task-chevron" }), "chevron-right");
       item.addEventListener("click", () => {
         const target = this.app.vault.getAbstractFileByPath(task.file);
         if (target instanceof import_obsidian.TFile) {
           void this.app.workspace.getLeaf("tab").openFile(target);
         }
       });
-    }
+    });
+    const footer = root.createDiv({ cls: "lucy-tasks-footer" });
+    (0, import_obsidian.setIcon)(footer.createSpan({ cls: "lucy-tasks-footer-icon" }), "mouse-pointer-click");
+    footer.createSpan({ text: "Click a task to open the note it lives in" });
   }
 };
 var LucyPlugin = class extends import_obsidian.Plugin {

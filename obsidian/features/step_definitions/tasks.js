@@ -17,6 +17,14 @@ Then('the list shows {string}', function (text) {
   );
 });
 
+Then('the view shows {int} tasks', function (count) {
+  assert.equal(
+    this.tasks.length,
+    count,
+    `expected ${count} tasks, got ${JSON.stringify(this.tasks.map((t) => t.text))}`
+  );
+});
+
 When('I click {string}', async function (text) {
   await this.driver.clickTask(this, text);
 });
