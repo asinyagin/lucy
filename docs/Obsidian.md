@@ -20,6 +20,8 @@ board "Tasks" accent=blue
 
 ## Scenarios
 
+TODO Add caret moving to task's todo on click
+
 ```gherkin
 Feature: Task list view
   As a Lucy user
