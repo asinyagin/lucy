@@ -28,11 +28,12 @@ Feature: Task list view
 
   Scenario: Show tasks from the whole vault
     Given a note "Ideas.md" contains the line "TODO Describe task list"
-    When I open the "Tasks" view in the right panel
+    When I open the "Tasks" view
     Then the list shows "Describe task list"
 
   Scenario: Open the source note from a task
-    Given the "Tasks" view shows "Describe task list"
-    When I click "Describe task list"
+    Given a note "Ideas.md" contains the line "TODO Describe task list"
+    When I open the "Tasks" view
+    And I click "Describe task list"
     Then the note "Ideas.md" opens in the editor
 ```

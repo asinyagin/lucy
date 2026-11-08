@@ -1,2 +1,5 @@
 # Dependencies
 node_modules/
+
+# Generated from gherkin blocks in ../docs
+features/generated/

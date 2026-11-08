@@ -1,0 +1,6 @@
+{
+  "default": {
+    "paths": ["features/generated/**/*.feature"],
+    "import": ["features/step_definitions/**/*.js", "features/support/**/*.js"]
+  }
+}
