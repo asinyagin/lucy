@@ -216,11 +216,19 @@ var TasksView = class extends import_obsidian.ItemView {
         });
         const leaf = existing != null ? existing : this.app.workspace.getLeaf("tab");
         this.app.workspace.revealLeaf(leaf);
+        if (import_obsidian.Platform.isMobile) {
+          const drawer = this.app.workspace.rightSplit;
+          if (!drawer.collapsed) {
+            drawer.collapse();
+          }
+        }
         void leaf.openFile(target).then(() => {
           const view = leaf.view;
           if (view instanceof import_obsidian.MarkdownView) {
             view.editor.setCursor({ line: task.line, ch: task.ch });
-            view.editor.focus();
+            if (!import_obsidian.Platform.isMobile) {
+              view.editor.focus();
+            }
           }
         });
       });
@@ -239,6 +247,9 @@ var LucyPlugin = class extends import_obsidian.Plugin {
       callback: () => this.openTasksView()
     });
     this.app.workspace.onLayoutReady(() => {
+      if (import_obsidian.Platform.isMobile) {
+        return;
+      }
       const existing = this.app.workspace.getLeavesOfType(TASKS_VIEW_TYPE);
       if (existing.length > 0) {
         this.app.workspace.revealLeaf(existing[0]);

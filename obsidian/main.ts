@@ -1,4 +1,4 @@
-import { ItemView, MarkdownView, Plugin, setIcon, TFile, WorkspaceLeaf } from 'obsidian';
+import { ItemView, MarkdownView, Platform, Plugin, setIcon, TFile, WorkspaceLeaf, WorkspaceMobileDrawer } from 'obsidian';
 
 export const TASKS_VIEW_TYPE = 'lucy-tasks-view';
 
@@ -207,11 +207,23 @@ class TasksView extends ItemView {
           .find((leaf) => (leaf.view as MarkdownView).file?.path === task.file);
         const leaf = existing ?? this.app.workspace.getLeaf('tab');
         this.app.workspace.revealLeaf(leaf);
+        // On mobile the Tasks view lives in the right drawer, which overlays
+        // the editor — collapse it so the opened note is visible.
+        if (Platform.isMobile) {
+          const drawer = this.app.workspace.rightSplit as WorkspaceMobileDrawer;
+          if (!drawer.collapsed) {
+            drawer.collapse();
+          }
+        }
         void leaf.openFile(target).then(() => {
           const view = leaf.view;
           if (view instanceof MarkdownView) {
             view.editor.setCursor({ line: task.line, ch: task.ch });
-            view.editor.focus();
+            // On mobile, focusing the editor raises the software keyboard and can
+            // wedge tap handling in the WKWebView during the leaf reveal.
+            if (!Platform.isMobile) {
+              view.editor.focus();
+            }
           }
         });
       });
@@ -234,6 +246,11 @@ export default class LucyPlugin extends Plugin {
     });
 
     this.app.workspace.onLayoutReady(() => {
+      // On mobile, revealing the view would pop the drawer open on every
+      // launch — there the view is opened on demand via the command.
+      if (Platform.isMobile) {
+        return;
+      }
       const existing = this.app.workspace.getLeavesOfType(TASKS_VIEW_TYPE);
       if (existing.length > 0) {
         this.app.workspace.revealLeaf(existing[0]);

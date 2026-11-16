@@ -4,9 +4,9 @@ The app's data source is the Obsidian vault. Tasks can be added to the vault usi
 
 The plugin is in directory `obsidian/`.
 
-The right panel contains a view with a list of tasks from the entire vault. The header shows the number of open tasks, and every task shows the note it comes from. Clicking a task opens the document containing it. The UI respects the Obsidian theme in light and dark mode.
+The right panel contains a view with a list of tasks from the entire vault. The header shows the number of open tasks, and every task shows the note it comes from. Clicking a task opens the document containing it; on mobile, the side panel closes so the note is visible. The UI respects the Obsidian theme in light and dark mode.
 
-The plugin registers an **Open tasks view** command in the command palette. It reveals the Tasks view, opening it if it is not open yet — on mobile, where Obsidian has no right panel, the command is the way to open the view.
+The plugin registers an **Open tasks view** command in the command palette. It reveals the Tasks view, opening it if it is not open yet. On mobile the view never opens on its own — the command is the only way to open it, since a right panel is only available as a swipeable drawer there.
 
 ```tsquare
 board "Tasks" accent=blue
