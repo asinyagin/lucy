@@ -5,15 +5,26 @@ Given('a note {string} contains the line {string}', async function (fileName, li
   await this.driver.createNote(this, fileName, line);
 });
 
+Given(
+  'a note {string} contains {int} lines with the following lines among them:',
+  async function (fileName, count, dataTable) {
+    const lines = dataTable.raw().map((row) => row[0]);
+    await this.driver.createNoteWithLines(this, fileName, count, lines);
+  }
+);
+
 When('I open the {string} view', async function (viewName) {
   assert.equal(viewName, 'Tasks');
   await this.driver.openTasksView(this);
 });
 
-Then('the list shows {string}', function (text) {
-  assert.ok(
-    this.tasks.some((t) => t.text === text),
-    `expected task list to show ${JSON.stringify(text)}, got ${JSON.stringify(this.tasks.map((t) => t.text))}`
+Then('the list shows the following tasks:', function (dataTable) {
+  const expected = dataTable.raw().map((row) => row[0]);
+  const actual = this.tasks.map((t) => t.text);
+  assert.deepEqual(
+    [...actual].sort(),
+    [...expected].sort(),
+    `expected task list to show exactly ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
   );
 });
 

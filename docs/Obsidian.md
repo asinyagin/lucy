@@ -2,7 +2,7 @@
 
 The app's data source is the Obsidian vault. Tasks can be added to the vault using the `TODO` keyword. Tasks can be defined in any md document. The Obsidian plugin simplifies working with tasks.
 
-The plugin is in directory 'obsidian/'.
+The plugin is in directory `obsidian/`.
 
 The right panel contains a view with a list of tasks from the entire vault. The header shows the number of open tasks, and every task shows the note it comes from. Clicking a task opens the document containing it. The UI respects the Obsidian theme in light and dark mode.
 
@@ -29,19 +29,21 @@ Feature: Task list view
   So that I can track what needs to be done
 
   Scenario: Show tasks from the whole vault
-    Given a note "Ideas.md" contains the line "TODO Describe task list"
+    Given a note "Ideas.md" contains 30 lines with the following lines among them:
+      | TODO Describe task list      |
+      | TODO Implement number of tasks |
+    And a note "Journal.md" contains 20 lines with the following lines among them:
+      | TODO Another task |
     When I open the "Tasks" view
-    Then the list shows "Describe task list"
+    Then the list shows the following tasks:
+      | Describe task list        |
+      | Implement number of tasks |
+      | Another task              |
+    And the view shows 3 tasks
 
   Scenario: Open the source note from a task
     Given a note "Ideas.md" contains the line "TODO Describe task list"
     When I open the "Tasks" view
     And I click "Describe task list"
     Then the note "Ideas.md" opens in the editor
-
-  Scenario: Show the number of tasks
-    Given a note "Ideas.md" contains the line "TODO Describe task list"
-    And a note "Journal.md" contains the line "TODO Another task"
-    When I open the "Tasks" view
-    Then the view shows 2 tasks
 ```

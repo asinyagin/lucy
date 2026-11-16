@@ -123,17 +123,20 @@ const driver = {
   async stop() {},
 
   async createNote(world, fileName, line) {
-    await page.evaluate(async ({ fileName, line }) => {
-      const obsidian = window.app;
-      const dir = fileName.includes('/') ? fileName.slice(0, fileName.lastIndexOf('/')) : null;
-      if (dir) await obsidian.vault.createFolder(dir).catch(() => {});
-      await obsidian.vault.create(fileName, `# ${fileName}\n\n${line}\n`);
-    }, { fileName, line });
-    await page.waitForFunction(
-      (name) => window.app.metadataCache.getCache(name) !== null,
-      fileName,
-      { timeout: 10000 }
-    );
+    await writeNote(fileName, `# ${fileName}\n\n${line}\n`);
+  },
+
+  async createNoteWithLines(world, fileName, count, givenLines) {
+    if (givenLines.length > count) {
+      throw new Error(
+        `cannot fit ${givenLines.length} given lines into a note with ${count} lines`
+      );
+    }
+    const lines = Array.from({ length: count - givenLines.length }, (_, i) => randomLine(i));
+    for (const line of givenLines) {
+      lines.splice(Math.floor(Math.random() * (lines.length + 1)), 0, line);
+    }
+    await writeNote(fileName, `# ${fileName}\n\n${lines.join('\n')}\n`);
   },
 
   async openTasksView(world) {
@@ -182,6 +185,34 @@ const driver = {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const FILLER_WORDS = [
+  'apple', 'bridge', 'candle', 'drift', 'ember', 'forest', 'garden', 'harbor',
+  'island', 'jungle', 'kettle', 'ladder', 'meadow', 'needle', 'orchard', 'pebble',
+  'quilt', 'river', 'sunset', 'thicket', 'umbrella', 'valley', 'willow', 'yarn',
+];
+
+function randomLine(index) {
+  const words = Array.from(
+    { length: 3 + Math.floor(Math.random() * 4) },
+    () => FILLER_WORDS[Math.floor(Math.random() * FILLER_WORDS.length)]
+  );
+  return `Note ${index + 1}: ${words.join(' ')}`;
+}
+
+async function writeNote(fileName, content) {
+  await page.evaluate(async ({ fileName, content }) => {
+    const obsidian = window.app;
+    const dir = fileName.includes('/') ? fileName.slice(0, fileName.lastIndexOf('/')) : null;
+    if (dir) await obsidian.vault.createFolder(dir).catch(() => {});
+    await obsidian.vault.create(fileName, content);
+  }, { fileName, content });
+  await page.waitForFunction(
+    (name) => window.app.metadataCache.getCache(name) !== null,
+    fileName,
+    { timeout: 10000 }
+  );
 }
 
 module.exports = { launch, quit, driver };
