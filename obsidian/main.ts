@@ -225,10 +225,21 @@ export default class LucyPlugin extends Plugin {
     this.registerView(TASKS_VIEW_TYPE, (leaf) => new TasksView(leaf));
 
     this.app.workspace.onLayoutReady(() => {
+      const existing = this.app.workspace.getLeavesOfType(TASKS_VIEW_TYPE);
+      if (existing.length > 0) {
+        this.app.workspace.revealLeaf(existing[0]);
+        return;
+      }
       const leaf = this.app.workspace.getRightLeaf(false);
       if (leaf) {
         void leaf.setViewState({ type: TASKS_VIEW_TYPE, active: true });
       }
     });
+  }
+
+  async onunload() {
+    for (const leaf of this.app.workspace.getLeavesOfType(TASKS_VIEW_TYPE)) {
+      leaf.detach();
+    }
   }
 }
