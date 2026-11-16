@@ -171,12 +171,16 @@ var TasksView = class extends import_obsidian.ItemView {
     return this.renderQueue;
   }
   async collectTasks() {
+    var _a;
     const tasks = [];
     for (const file of this.app.vault.getMarkdownFiles()) {
       const content = await this.app.vault.read(file);
-      for (const line of content.split("\n")) {
-        const match = line.match(/^TODO\s+(.+)$/);
-        if (match) tasks.push({ text: match[1], file: file.path });
+      const lines = content.split("\n");
+      for (let line = 0; line < lines.length; line++) {
+        const match = lines[line].match(/^TODO\s+(.+)$/);
+        if (match) {
+          tasks.push({ text: match[1], file: file.path, line, ch: (_a = match.index) != null ? _a : 0 });
+        }
       }
     }
     return tasks;
@@ -206,7 +210,14 @@ var TasksView = class extends import_obsidian.ItemView {
       item.addEventListener("click", () => {
         const target = this.app.vault.getAbstractFileByPath(task.file);
         if (target instanceof import_obsidian.TFile) {
-          void this.app.workspace.getLeaf("tab").openFile(target);
+          const leaf = this.app.workspace.getLeaf("tab");
+          void leaf.openFile(target).then(() => {
+            const view = leaf.view;
+            if (view instanceof import_obsidian.MarkdownView) {
+              view.editor.setCursor({ line: task.line, ch: task.ch });
+              view.editor.focus();
+            }
+          });
         }
       });
     });
