@@ -201,16 +201,19 @@ class TasksView extends ItemView {
       setIcon(item.createSpan({ cls: 'lucy-task-chevron' }), 'chevron-right');
       item.addEventListener('click', () => {
         const target = this.app.vault.getAbstractFileByPath(task.file);
-        if (target instanceof TFile) {
-          const leaf = this.app.workspace.getLeaf('tab');
-          void leaf.openFile(target).then(() => {
-            const view = leaf.view;
-            if (view instanceof MarkdownView) {
-              view.editor.setCursor({ line: task.line, ch: task.ch });
-              view.editor.focus();
-            }
-          });
-        }
+        if (!(target instanceof TFile)) return;
+        const existing = this.app.workspace
+          .getLeavesOfType('markdown')
+          .find((leaf) => (leaf.view as MarkdownView).file?.path === task.file);
+        const leaf = existing ?? this.app.workspace.getLeaf('tab');
+        this.app.workspace.revealLeaf(leaf);
+        void leaf.openFile(target).then(() => {
+          const view = leaf.view;
+          if (view instanceof MarkdownView) {
+            view.editor.setCursor({ line: task.line, ch: task.ch });
+            view.editor.focus();
+          }
+        });
       });
     });
 

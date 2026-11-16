@@ -47,4 +47,13 @@ Feature: Task list view
     And I click "Describe task list"
     Then the note "Ideas.md" opens in the editor
     And the caret is at the TODO for "Describe task list"
+
+  Scenario: Focus the note when it is already open
+    Given a note "Ideas.md" contains 30 lines with the following lines among them:
+      | TODO Describe task list |
+    And the note "Ideas.md" is open in the editor
+    When I open the "Tasks" view
+    And I click "Describe task list"
+    Then only the note "Ideas.md" is open in the editor
+    And the caret is at the TODO for "Describe task list"
 ```

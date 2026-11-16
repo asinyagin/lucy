@@ -44,6 +44,19 @@ Then('the note {string} opens in the editor', function (fileName) {
   assert.equal(this.driver.openedNote(this), fileName);
 });
 
+Given('the note {string} is open in the editor', async function (fileName) {
+  await this.driver.openNote(this, fileName);
+});
+
+Then('only the note {string} is open in the editor', async function (fileName) {
+  const openNotes = await this.driver.openNotePaths(this);
+  assert.deepEqual(
+    openNotes,
+    [fileName],
+    `expected only ${JSON.stringify(fileName)} to be open, got ${JSON.stringify(openNotes)}`
+  );
+});
+
 Then('the caret is at the TODO for {string}', async function (text) {
   const fileName = this.driver.openedNote(this);
   const expected = await this.driver.findTodoPosition(this, fileName, text);

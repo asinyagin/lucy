@@ -209,16 +209,20 @@ var TasksView = class extends import_obsidian.ItemView {
       (0, import_obsidian.setIcon)(item.createSpan({ cls: "lucy-task-chevron" }), "chevron-right");
       item.addEventListener("click", () => {
         const target = this.app.vault.getAbstractFileByPath(task.file);
-        if (target instanceof import_obsidian.TFile) {
-          const leaf = this.app.workspace.getLeaf("tab");
-          void leaf.openFile(target).then(() => {
-            const view = leaf.view;
-            if (view instanceof import_obsidian.MarkdownView) {
-              view.editor.setCursor({ line: task.line, ch: task.ch });
-              view.editor.focus();
-            }
-          });
-        }
+        if (!(target instanceof import_obsidian.TFile)) return;
+        const existing = this.app.workspace.getLeavesOfType("markdown").find((leaf2) => {
+          var _a;
+          return ((_a = leaf2.view.file) == null ? void 0 : _a.path) === task.file;
+        });
+        const leaf = existing != null ? existing : this.app.workspace.getLeaf("tab");
+        this.app.workspace.revealLeaf(leaf);
+        void leaf.openFile(target).then(() => {
+          const view = leaf.view;
+          if (view instanceof import_obsidian.MarkdownView) {
+            view.editor.setCursor({ line: task.line, ch: task.ch });
+            view.editor.focus();
+          }
+        });
       });
     });
     const footer = root.createDiv({ cls: "lucy-tasks-footer" });

@@ -116,6 +116,11 @@ const driver = {
     await page.evaluate(async () => {
       const obsidian = window.app;
       for (const file of obsidian.vault.getFiles()) await obsidian.vault.delete(file);
+      const leaves = [];
+      obsidian.workspace.iterateAllLeaves((leaf) => leaves.push(leaf));
+      for (const leaf of leaves) {
+        if (leaf.view?.getViewType?.() !== 'lucy-tasks-view') leaf.detach();
+      }
     });
     world.tasks = [];
     world.openedNote = null;
@@ -205,6 +210,26 @@ const driver = {
       }
       return null;
     }, { fileName, taskText });
+  },
+
+  async openNote(world, fileName) {
+    await page.evaluate(async (fileName) => {
+      const app = window.app;
+      const file = app.vault.getAbstractFileByPath(fileName);
+      await app.workspace.getLeaf('tab').openFile(file);
+    }, fileName);
+  },
+
+  async openNotePaths(world) {
+    return page.evaluate(() => {
+      const paths = [];
+      window.app.workspace.iterateAllLeaves((leaf) => {
+        if (leaf.view?.getViewType?.() !== 'markdown') return;
+        const file = leaf.view.file;
+        if (file) paths.push(file.path);
+      });
+      return paths;
+    });
   },
 };
 
