@@ -20,8 +20,6 @@ board "Tasks" accent=blue
 
 ## Scenarios
 
-TODO Add caret moving to task's todo on click
-
 ```gherkin
 Feature: Task list view
   As a Lucy user
@@ -42,8 +40,11 @@ Feature: Task list view
     And the view shows 3 tasks
 
   Scenario: Open the source note from a task
-    Given a note "Ideas.md" contains the line "TODO Describe task list"
+    Given a note "Ideas.md" contains 30 lines with the following lines among them:
+      | TODO Describe task list      |
+      | TODO Implement number of tasks |
     When I open the "Tasks" view
     And I click "Describe task list"
     Then the note "Ideas.md" opens in the editor
+    And the caret is at the TODO for "Describe task list"
 ```

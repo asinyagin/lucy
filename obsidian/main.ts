@@ -1,4 +1,4 @@
-import { ItemView, Plugin, setIcon, TFile, WorkspaceLeaf } from 'obsidian';
+import { ItemView, MarkdownView, Plugin, setIcon, TFile, WorkspaceLeaf } from 'obsidian';
 
 export const TASKS_VIEW_TYPE = 'lucy-tasks-view';
 
@@ -109,6 +109,8 @@ const VIEW_CSS = `
 interface TaskItem {
   text: string;
   file: string;
+  line: number;
+  ch: number;
 }
 
 function noteName(path: string): string {
@@ -161,9 +163,12 @@ class TasksView extends ItemView {
     const tasks: TaskItem[] = [];
     for (const file of this.app.vault.getMarkdownFiles()) {
       const content = await this.app.vault.read(file);
-      for (const line of content.split('\n')) {
-        const match = line.match(/^TODO\s+(.+)$/);
-        if (match) tasks.push({ text: match[1], file: file.path });
+      const lines = content.split('\n');
+      for (let line = 0; line < lines.length; line++) {
+        const match = lines[line].match(/^TODO\s+(.+)$/);
+        if (match) {
+          tasks.push({ text: match[1], file: file.path, line, ch: match.index ?? 0 });
+        }
       }
     }
     return tasks;
@@ -197,7 +202,14 @@ class TasksView extends ItemView {
       item.addEventListener('click', () => {
         const target = this.app.vault.getAbstractFileByPath(task.file);
         if (target instanceof TFile) {
-          void this.app.workspace.getLeaf('tab').openFile(target);
+          const leaf = this.app.workspace.getLeaf('tab');
+          void leaf.openFile(target).then(() => {
+            const view = leaf.view;
+            if (view instanceof MarkdownView) {
+              view.editor.setCursor({ line: task.line, ch: task.ch });
+              view.editor.focus();
+            }
+          });
         }
       });
     });

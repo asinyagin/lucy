@@ -43,3 +43,17 @@ When('I click {string}', async function (text) {
 Then('the note {string} opens in the editor', function (fileName) {
   assert.equal(this.driver.openedNote(this), fileName);
 });
+
+Then('the caret is at the TODO for {string}', async function (text) {
+  const fileName = this.driver.openedNote(this);
+  const expected = await this.driver.findTodoPosition(this, fileName, text);
+  if (!expected) {
+    throw new Error(`no TODO for ${JSON.stringify(text)} found in ${JSON.stringify(fileName)}`);
+  }
+  const actual = await this.driver.caretPosition(this);
+  assert.deepEqual(
+    actual,
+    expected,
+    `expected caret at ${JSON.stringify(expected)} (start of the TODO for ${JSON.stringify(text)}), got ${JSON.stringify(actual)}`
+  );
+});

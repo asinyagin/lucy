@@ -181,6 +181,31 @@ const driver = {
   openedNote(world) {
     return world.openedNote;
   },
+
+  async caretPosition(world) {
+    return page.evaluate(() => {
+      const view = window.app.workspace.activeLeaf?.view;
+      if (!view || typeof view.editor?.getCursor !== 'function') return null;
+      const cursor = view.editor.getCursor();
+      return { line: cursor.line, ch: cursor.ch };
+    });
+  },
+
+  async findTodoPosition(world, fileName, taskText) {
+    return page.evaluate(async ({ fileName, taskText }) => {
+      const app = window.app;
+      const file = app.vault.getAbstractFileByPath(fileName);
+      if (!file) return null;
+      const lines = (await app.vault.read(file)).split('\n');
+      for (let line = 0; line < lines.length; line++) {
+        const match = lines[line].match(/^TODO\s+(.+)$/);
+        if (match && match[1] === taskText) {
+          return { line, ch: match.index ?? 0 };
+        }
+      }
+      return null;
+    }, { fileName, taskText });
+  },
 };
 
 function sleep(ms) {
