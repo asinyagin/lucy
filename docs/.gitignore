@@ -4,6 +4,7 @@
 # Obsidian
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/appearance.json
 .obsidian/cache/
 .obsidian/plugins/*/data.json
 .trash/

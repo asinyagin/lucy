@@ -144,8 +144,29 @@ const driver = {
     await writeNote(fileName, `# ${fileName}\n\n${lines.join('\n')}\n`);
   },
 
-  async openTasksView(world) {
-    const opened = await page.evaluate(async () => {
+  async runCommand(world, commandName) {
+    const commandId = await page.evaluate(async (name) => {
+      const commands = window.app.commands.commands;
+      const entry = Object.entries(commands).find(
+        ([, command]) => command.name === name || command.name.endsWith(`: ${name}`)
+      );
+      if (!entry) return null;
+      window.app.commands.executeCommandById(entry[0]);
+      return entry[0];
+    }, commandName);
+    if (!commandId) {
+      throw new Error(`no command named ${JSON.stringify(commandName)} found`);
+    }
+    await sleep(300);
+  },
+
+  async isTasksViewOpen(world) {
+    return page.evaluate(
+      () => window.app.workspace.getLeavesOfType('lucy-tasks-view').length > 0
+    );
+  },
+
+  async openTasksView(world) {    const opened = await page.evaluate(async () => {
       const obsidian = window.app;
       const leaves = obsidian.workspace.getLeavesOfType('lucy-tasks-view');
       if (!leaves.length) return false;

@@ -233,6 +233,11 @@ var TasksView = class extends import_obsidian.ItemView {
 var LucyPlugin = class extends import_obsidian.Plugin {
   async onload() {
     this.registerView(TASKS_VIEW_TYPE, (leaf) => new TasksView(leaf));
+    this.addCommand({
+      id: "open-tasks-view",
+      name: "Open tasks view",
+      callback: () => this.openTasksView()
+    });
     this.app.workspace.onLayoutReady(() => {
       const existing = this.app.workspace.getLeavesOfType(TASKS_VIEW_TYPE);
       if (existing.length > 0) {
@@ -243,6 +248,18 @@ var LucyPlugin = class extends import_obsidian.Plugin {
       if (leaf) {
         void leaf.setViewState({ type: TASKS_VIEW_TYPE, active: true });
       }
+    });
+  }
+  openTasksView() {
+    var _a;
+    const existing = this.app.workspace.getLeavesOfType(TASKS_VIEW_TYPE);
+    if (existing.length > 0) {
+      this.app.workspace.revealLeaf(existing[0]);
+      return;
+    }
+    const leaf = (_a = this.app.workspace.getRightLeaf(false)) != null ? _a : this.app.workspace.getLeaf("tab");
+    void leaf.setViewState({ type: TASKS_VIEW_TYPE, active: true }).then(() => {
+      this.app.workspace.revealLeaf(leaf);
     });
   }
   async onunload() {

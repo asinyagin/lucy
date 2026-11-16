@@ -6,6 +6,8 @@ The plugin is in directory `obsidian/`.
 
 The right panel contains a view with a list of tasks from the entire vault. The header shows the number of open tasks, and every task shows the note it comes from. Clicking a task opens the document containing it. The UI respects the Obsidian theme in light and dark mode.
 
+The plugin registers an **Open tasks view** command in the command palette. It reveals the Tasks view, opening it if it is not open yet — on mobile, where Obsidian has no right panel, the command is the way to open the view.
+
 ```tsquare
 board "Tasks" accent=blue
   screen custom "Tasks" width=480 height=480
@@ -56,4 +58,8 @@ Feature: Task list view
     And I click "Describe task list"
     Then only the note "Ideas.md" is open in the editor
     And the caret is at the TODO for "Describe task list"
+
+  Scenario: Open the Tasks view with the command
+    When I run the "Open tasks view" command
+    Then the "Tasks" view is open
 ```

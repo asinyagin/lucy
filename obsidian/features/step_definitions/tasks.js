@@ -18,6 +18,16 @@ When('I open the {string} view', async function (viewName) {
   await this.driver.openTasksView(this);
 });
 
+When('I run the {string} command', async function (commandName) {
+  await this.driver.runCommand(this, commandName);
+});
+
+Then('the {string} view is open', async function (viewName) {
+  assert.equal(viewName, 'Tasks');
+  const isOpen = await this.driver.isTasksViewOpen(this);
+  assert.ok(isOpen, `expected the ${JSON.stringify(viewName)} view to be open`);
+});
+
 Then('the list shows the following tasks:', function (dataTable) {
   const expected = dataTable.raw().map((row) => row[0]);
   const actual = this.tasks.map((t) => t.text);
